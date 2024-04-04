@@ -1,0 +1,36 @@
+version: "3.8"
+services:
+  db:
+    image: mysql:5.7
+    networks:
+      - network-wordpress
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example_root_password
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: example_wp_password
+
+  wordpress:
+    image: wordpress:latest
+    networks:
+      - network-wordpress    
+    volumes:
+      - wp_data:/var/www/html
+    ports:
+      - "8088:80"
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: example_wp_password
+  
+networks:
+  network-wordpress:
+
+volumes: 
+  db_data:
+  wp_data:
